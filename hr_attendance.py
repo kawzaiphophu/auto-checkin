@@ -3,12 +3,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 import os
 
 # ===== CONFIG =====
 URL = "https://hrleaveapp-335bem9z.manus.space/"
 TOKEN = os.getenv("HR_TOKEN", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcGVuSWQiOiI1cVdSWVNwb3FldlVaUEd1VkpHNkZjIiwiYXBwSWQiOiIzMzViRW05WjdhcnRqcmtqZDNoQ2dUIiwibmFtZSI6IlNvbWJvb24gWmFpcGhvcGh1IiwiZXhwIjoxODAxNjc4Nzc1fQ.BNBR5Uz0V3vgrsLjdkbENU_4z8DEiQoVJn-LpC0zLZo")
+
 # ===== Chrome options =====
 options = webdriver.ChromeOptions()
 options.add_argument("--headless=new")
@@ -20,7 +23,9 @@ options.add_argument("--window-size=1920,1080")
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
-driver = webdriver.Chrome(options=options)
+# ใช้ webdriver-manager เพื่อจัดการ ChromeDriver อัตโนมัติ
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options=options)
 
 try:
     driver.get(URL)
