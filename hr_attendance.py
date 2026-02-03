@@ -11,10 +11,14 @@ URL = "https://hrleaveapp-335bem9z.manus.space/"
 TOKEN = os.getenv("HR_TOKEN", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcGVuSWQiOiI1cVdSWVNwb3FldlVaUEd1VkpHNkZjIiwiYXBwSWQiOiIzMzViRW05WjdhcnRqcmtqZDNoQ2dUIiwibmFtZSI6IlNvbWJvb24gWmFpcGhvcGh1IiwiZXhwIjoxODAxNjc4Nzc1fQ.BNBR5Uz0V3vgrsLjdkbENU_4z8DEiQoVJn-LpC0zLZo")
 # ===== Chrome options =====
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")
+options.add_argument("--headless=new")
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--disable-software-rasterizer")
 options.add_argument("--window-size=1920,1080")
+options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
 driver = webdriver.Chrome(options=options)
 
