@@ -10,42 +10,37 @@ jobs:
   attendance:
     runs-on: ubuntu-latest
     
+    container:
+      image: selenium/standalone-chrome:latest
+      options: --shm-size=2gb
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.9'
-        cache: 'pip'
-    
-    - name: Cache pip packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-    
-    - name: Install Chrome and ChromeDriver
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget unzip xvfb libxi6 libgconf-2-4
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
-    
-    - name: Run attendance script
-      env:
-        HR_TOKEN: ${{ secrets.HR_TOKEN }}
-      run: |
-        python hr_attendance.py
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Run attendance script
+        env:
+          HR_TOKEN: ${{ secrets.HR_TOKEN }}
+        run: |
+          python hr_attendance.py
     
     - name: Report success
       if: success()
