@@ -1,0 +1,44 @@
+name: HR Attendance
+
+on:
+  schedule:
+    # รันทุกวันเวลา 9:00 น. (UTC+7 = 02:00 UTC)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # อนุญาตให้รันด้วยตนเองได้
+
+jobs:
+  attendance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+    
+    - name: Install Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: stable
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Run attendance script
+      env:
+        HR_TOKEN: ${{ secrets.HR_TOKEN }}
+      run: |
+        python hr_attendance.py
+    
+    - name: Upload logs if failed
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: attendance-logs
+        path: |
+          *.log
+        retention-days: 7
