@@ -18,7 +18,9 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install playwright==1.41.0 --no-deps
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       
       - name: Run attendance script
         env:
